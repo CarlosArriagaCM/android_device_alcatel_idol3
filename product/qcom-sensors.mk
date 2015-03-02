@@ -9,6 +9,8 @@ PRODUCT_COPY_FILES += \
 
 # Sensors
 PRODUCT_PACKAGES += \
+    libjni_proximityCalibrate \
+    ProximityCalibrate \
     android.hardware.sensors@1.0-impl
 
 # Permissions

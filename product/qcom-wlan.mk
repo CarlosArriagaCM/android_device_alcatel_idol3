@@ -8,7 +8,8 @@ PRODUCT_PACKAGES += \
     libqsap_sdk \
     libQWiFiSoftApCfg \
     libwcnss_qmi \
-    wcnss_service
+    wcnss_service \
+    wificond
 
 PRODUCT_PACKAGES += \
     hostapd \

@@ -11,6 +11,10 @@ PRODUCT_PACKAGES += \
     wcnss_service \
     wificond
 
+# WiFi HAL
+PRODUCT_PACKAGES += \
+    android.hardware.wifi@1.0-service
+
 PRODUCT_PACKAGES += \
     hostapd \
     wpa_supplicant \

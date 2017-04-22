@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include device/alcatel/idol3-common/BoardConfigCommon.mk
+
 LOCAL_PATH := device/alcatel/idol3
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include

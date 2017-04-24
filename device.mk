@@ -14,9 +14,6 @@
 # limitations under the License.
 #
 
-# Inherit from idol3-common
-$(call inherit-product, device/alcatel/idol3-common/idol3.mk)
-
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 

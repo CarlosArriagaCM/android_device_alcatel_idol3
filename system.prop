@@ -1,3 +1,7 @@
 # WiFi Display
 persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
+
+# Radio
+ro.telephony.default_network=9
+telephony.lteOnGsmDevice=1

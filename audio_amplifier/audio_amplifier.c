@@ -68,7 +68,7 @@ static int is_spkr_needed(uint32_t snd_device) {
     }
 }
 
-static int amp_enable_output_devices(hw_device_t *device, uint32_t devices, bool enable, bool disable) {
+static int amp_enable_output_devices(hw_device_t *device, uint32_t devices, bool enable) {
     tfa9897_device_t *tfa9897 = (tfa9897_device_t*) device;
 
     if (enable) {
@@ -77,7 +77,7 @@ static int amp_enable_output_devices(hw_device_t *device, uint32_t devices, bool
                 tfa9897->speaker_on(0, 2);
                 break;
             case MONO_RIGHT:
-                tfa9897->speaker_on();
+                tfa9897->speaker_on(2);
                 break;
             case NO_SPEAKER:
                 tfa9897->speaker_off(1);
@@ -102,6 +102,8 @@ static int amp_dev_close(hw_device_t *device) {
 }
 
 static int amp_init(tfa9897_device_t *tfa9897) {
+    size_t i;
+    int subscribe = 1;
 
     tfa9897->init(SAMPLE_RATE);
 

@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2016, The CyanogenMod Project
- *           (C) 2017, The LineageOS Project
+ * Copyright (C) 2016-2017, The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,54 +38,51 @@ typedef struct tfa9897_device {
     amplifier_device_t amp_dev;
     void *lib_ptr;
     int (*init)(int);
-    int (*speaker_on)(int, int);
-    int (*speaker_off)(int);
+    int (*speaker_on)(int);
+    int (*enable)(int);
 } tfa9897_device_t;
 
 static tfa9897_device_t *tfa9897_dev = NULL;
 
 #define SAMPLE_RATE 48000
 
-enum {
-    NO_SPEAKER = 0,
-    MONO_RIGHT,
-    STEREO_SPEAKER
-};
+static int is_speaker(uint32_t snd_device) {
+    int speaker = 0;
 
-static int is_spkr_needed(uint32_t snd_device) {
     switch (snd_device) {
         case SND_DEVICE_OUT_SPEAKER:
         case SND_DEVICE_OUT_SPEAKER_REVERSE:
         case SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES:
         case SND_DEVICE_OUT_VOICE_SPEAKER:
-            return STEREO_SPEAKER;
-        case SND_DEVICE_OUT_HANDSET:
-        case SND_DEVICE_OUT_VOICE_HANDSET:
-            return MONO_RIGHT;
-        default:
-            return NO_SPEAKER;
+        case SND_DEVICE_OUT_SPEAKER_AND_HDMI:
+        case SND_DEVICE_OUT_SPEAKER_AND_USB_HEADSET:
+        case SND_DEVICE_OUT_SPEAKER_AND_ANC_HEADSET:
+            speaker = 1;
+            break;
     }
+
+    return speaker;
+}
+
+static int is_voice_speaker(uint32_t snd_device) {
+    return snd_device == SND_DEVICE_OUT_VOICE_SPEAKER;
 }
 
 static int amp_enable_output_devices(hw_device_t *device, uint32_t devices, bool enable) {
     tfa9897_device_t *tfa9897 = (tfa9897_device_t*) device;
 
-    if (enable) {
-        switch (is_spkr_needed(devices)) {
-            case STEREO_SPEAKER:
-                tfa9897->speaker_on(0, 2);
-                break;
-            case MONO_RIGHT:
-                tfa9897->speaker_on(2);
-                break;
-            case NO_SPEAKER:
-                tfa9897->speaker_off(1);
-                break;
+    if (is_speaker(devices)) {
+        if (enable) {
+            tfa9897->enable(1);
+            if (is_voice_speaker(devices)) {
+                tfa9897->speaker_on(1);
+            } else {
+                tfa9897->speaker_on(0);
+            }
+        } else {
+            tfa9897->enable(0);
         }
-    } else {
-        tfa9897->speaker_off(1) ;
     }
-
     return 0;
 }
 
@@ -114,7 +110,7 @@ static int amp_module_open(const hw_module_t *module,
         __attribute__((unused)) const char *name, hw_device_t **device)
 {
     if (tfa9897_dev) {
-        ALOGE("%s:%d: Unable to open second instance of tfa9897 amplifier\n",
+        ALOGE("%s:%d: Unable to open second instance of TFA9897 amplifier\n",
                 __func__, __LINE__);
         return -EBUSY;
     }
@@ -143,9 +139,9 @@ static int amp_module_open(const hw_module_t *module,
 
     *(void **)&tfa9897_dev->init = dlsym(tfa9897_dev->lib_ptr, "tfa9897_init");
     *(void **)&tfa9897_dev->speaker_on = dlsym(tfa9897_dev->lib_ptr, "tfa9897_SpeakerOn");
-    *(void **)&tfa9897_dev->speaker_off = dlsym(tfa9897_dev->lib_ptr, "tfa9897_SpeakerOff");
+    *(void **)&tfa9897_dev->enable = dlsym(tfa9897_dev->lib_ptr, "tfa9897_enable");
 
-    if (!tfa9897_dev->init || !tfa9897_dev->enable || !tfa9897_dev->disable) {
+    if (!tfa9897_dev->init || !tfa9897_dev->speaker_on || !tfa9897_dev->enable) {
         ALOGE("%s:%d: Unable to find required symbols", __func__, __LINE__);
         dlclose(tfa9897_dev->lib_ptr);
         free(tfa9897_dev);

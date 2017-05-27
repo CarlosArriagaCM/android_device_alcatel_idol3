@@ -130,10 +130,10 @@ vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Postprocessing
--app/colorservice/colorservice.apk
+-app/colorservice/colorservice.apk|38806e1689097f00080ae4e37da132ac5e810149
 bin/mm-pp-daemon
 etc/permissions/com.qti.snapdragon.sdk.display.xml
-framework/com.qti.snapdragon.sdk.display.jar
+-framework/com.qti.snapdragon.sdk.display.jar|4e26056d40946f61681b2176a513ec3a4a7e1ba3
 vendor/lib64/libdisp-aba.so
 vendor/lib64/libmm-abl.so
 vendor/lib64/libmm-abl-oem.so
@@ -178,7 +178,7 @@ vendor/lib/libqmi.so
 vendor/lib/libsmemlog.so
 
 # Radio
--app/shutdownlistener/shutdownlistener.apk
+-app/shutdownlistener/shutdownlistener.apk|0f31f4d712b90c5cf61f2e31f0aa17eb1dcb86f6
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|49cfc9721acd3796c649eab52da9db71d91327f9
 bin/netmgrd
 bin/qmuxd
@@ -190,8 +190,8 @@ etc/data/netmgr_config.xml
 etc/data/qmi_config.xml
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
--framework/qcnvitems.jar
--framework/qcrilhook.jar
+-framework/qcnvitems.jar|9491e2b655ee3a4eb8820eb8a93e8fa400ff9726
+-framework/qcrilhook.jar|bfd6c146334249f4505039ad3f7fdde00be5e661
 lib64/libril.so
 lib/libril.so
 vendor/lib64/libcneapiclient.so
@@ -224,7 +224,7 @@ vendor/lib/libthermalclient.so
 vendor/lib64/libthermalioctl.so
 
 # Time services
--app/TimeService/TimeService.apk
+-app/TimeService/TimeService.apk|955648501f6d363d5c495f163776dc8fac485432
 bin/time_daemon
 -vendor/lib64/libtime_genoff.so
 -vendor/lib/libtime_genoff.so

@@ -92,11 +92,6 @@ void common_properties()
         property_set("ro.build.product", "idol3");
 }
 
-void dualsim_properties(char const multisim_config[])
-{
-    property_set("persist.radio.multisim.config", multisim_config);
-}
-
 void gsm_properties(char const default_network[])
 {
     property_set("ro.telephony.default_network", default_network);
@@ -113,7 +108,6 @@ void vendor_load_properties()
     if (curef_version == "6045I") {
         /* 6045I (North America) */
         common_properties();
-        dualsim_properties("single");
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045I/idol3:6.0.1/MMB29M/v7VAB-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VAB-0 release-keys");
@@ -121,7 +115,6 @@ void vendor_load_properties()
     } else if (curef_version == "6045B") {
         /* 6045B */
         common_properties();
-        dualsim_properties("single");
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045B/idol3:5.0.2/LRX22G/v7SQX-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7SQX-0 release-keys");
@@ -129,7 +122,6 @@ void vendor_load_properties()
     } else if (curef_version == "6045K") {
         /* 6045K */
         common_properties();
-        dualsim_properties("dsds");
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045K/idol3:6.0.1/MMB29M/v7VG6-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VG6-0 release-keys");
@@ -137,7 +129,6 @@ void vendor_load_properties()
     } else if (curef_version == "6045O") {
         /* 6045O Cricket */
         common_properties();
-        dualsim_properties("single");
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045O/idol3:5.0.2/LRX22G/v5AMB:user/release-keys");
         property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v5AMB release-keys");
@@ -145,7 +136,6 @@ void vendor_load_properties()
     } else if (curef_version == "6045Y") {
         /* 6045Y */
         common_properties();
-        dualsim_properties("single");
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045Y/idol3:6.0.1/MMB29M/v7VG6-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VG6-0 release-keys");
@@ -153,7 +143,6 @@ void vendor_load_properties()
     } else {
         /* I806 */
         common_properties();
-        dualsim_properties("dsds");
         gsm_properties("10");
         property_set("ro.build.fingerprint", "TCL/TCL_i806/idol3:5.0.2/LRX22G/v7TM4-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7TM4-0 release-keys");

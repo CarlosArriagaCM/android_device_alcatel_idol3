@@ -160,9 +160,5 @@ void vendor_load_properties()
         property_set("persist.radio.multisim.config", "dsds");
         property_set("ro.telephony.ril.config", "simactivation");
     }
-
-    device = property_get("ro.product.device");
-    ERROR("Found curef id %s setting build properties for %s device\n", curef_version.c_str(), device.c_str());
-
     init_alarm_boot_properties();
 }

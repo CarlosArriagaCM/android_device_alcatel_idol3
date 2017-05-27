@@ -104,8 +104,8 @@ void gsm_properties(char const default_network[])
 
 void vendor_load_properties()
 {
-    std::string device = property_get("ro.cm.device");
-    if (device != "idol3")
+    std::string platform = property_get("ro.board.platform");
+    if (platform != ANDROID_TARGET)
         return;
 
     std::string curef_version = property_get("ro.cm.curef");

@@ -11,12 +11,16 @@ vendor/lib64/libacdbrtac.so
 vendor/lib64/libadiertac.so
 vendor/lib64/libaudcal.so
 vendor/lib64/libFlacSwDec.so
+vendor/lib64/libhwdaphal.so
 vendor/lib/hw/sound_trigger.primary.msm8916.so
+lib64/hw/audio.primary.msm8916.so
+lib/hw/audio.primary.msm8916.so
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbloader.so
 vendor/lib/libacdbrtac.so
 vendor/lib/libadiertac.so
 vendor/lib/libaudcal.so
+vendor/lib/libhwdaphal.so
 vendor/lib/libFlacSwDec.so
 vendor/lib/libsmwrapper.so
 vendor/lib/soundfx/libqcbassboost.so
@@ -183,6 +187,7 @@ vendor/lib/libsmemlog.so
 bin/netmgrd
 bin/qmuxd
 bin/radish
+bin/rild
 bin/rmt_storage
 bin/tftp_server
 etc/data/dsi_config.xml
@@ -192,6 +197,8 @@ etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar|9491e2b655ee3a4eb8820eb8a93e8fa400ff9726
 -framework/qcrilhook.jar|bfd6c146334249f4505039ad3f7fdde00be5e661
+lib64/libnetd_client.so
+lib/libnetd_client.so
 lib64/libril.so
 lib/libril.so
 vendor/lib64/libcneapiclient.so

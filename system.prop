@@ -1,7 +1,103 @@
+# Audio
+ro.qc.sdk.audio.fluencetype=fluence
+persist.audio.fluence.voicecall=true
+persist.audio.fluence.voicerec=false
+persist.audio.fluence.speaker=false
+audio.deep_buffer.media=true
+audio.offload.buffer.size.kb=64
+audio.offload.gapless.enabled=true
+audio.offload.min.duration.secs=30
+audio.offload.pcm.16bit.enable=false
+audio.offload.pcm.24bit.enable=false
+audio.offload.video=true
+av.streaming.offload.enable=true
+use.voice.path.for.pcm.voip=true
+voice.conc.fallbackpath=deep-buffer
+
+# Bluetooth
+qcom.bluetooth.soc=smd
+ro.bluetooth.dun=true
+ro.bluetooth.hfp.ver=1.7
+ro.bluetooth.sap=true
+ro.qualcomm.bluetooth.ftp=true
+ro.qualcomm.bluetooth.hfp=true
+ro.qualcomm.bluetooth.hsp=true
+ro.qualcomm.bluetooth.map=true
+ro.qualcomm.bluetooth.nap=true
+ro.qualcomm.bluetooth.opp=true
+ro.qualcomm.bluetooth.pbap=true
+ro.qualcomm.bt.hci_transport=smd
+
+# Camera
+persist.camera.cpp.duplication=false
+persist.camera.hal.debug.mask=0
+persist.camera.pip.support=0
+
+# Display
+debug.composition.type=c2d
+debug.enable.sglscale=1
+debug.mdpcomp.idletime=600
+persist.hwc.mdpcomp.enable=true
+persist.hwc.ptor.enable=true
+ro.opengles.version=196609
+ro.qualcomm.cabl=2
+
+# Factory reset protection
+ro.frp.pst=/dev/block/bootdevice/by-name/config
+
+# Perf
+ro.am.reschedule_service=true
+ro.config.max_starting_bg=8
+ro.sys.fw.dex2oat_thread_count=4
+ro.vendor.extension_library=libqti-perfd-client.so
+persist.sys.power_ctrl=1
+ro.min_freq_0=960000
+ro.min_freq_4=800000
+
+# Media
+media.aac_51_output_enabled=true
+drm.service.enabled=1 \
+vidc.enc.narrow.searchrange=1
+
+# Screen density
+ro.sf.lcd_density=480
+
 # WiFi Display
 persist.debug.wfd.enable=1
 persist.sys.wfd.virtual=0
 
+# Wifi
+ro.disableWifiApFirmwareReload=true
+wifi.interface=wlan0
+
 # Radio
 ro.telephony.default_network=9
 telephony.lteOnGsmDevice=1
+DEVICE_PROVISIONED=1
+persist.data.qmi.adb_logmask=0
+persist.dbg.volte_avail_ovr=1
+persist.dbg.vt_avail_ovr=1
+persist.radio.apm_sim_not_pwdn=1
+persist.radio.custom_ecc=0
+persist.radio.manual_nw_rej_ct
+persist.radio.mns_with_all_rat=0
+persist.radio.orig_num_disp=false
+persist.radio.rat_on=combine
+persist.radio.sib16_support=1
+persist.rild.nitz_long_ons_0=""
+persist.rild.nitz_long_ons_1=""
+persist.rild.nitz_long_ons_2=""
+persist.rild.nitz_long_ons_3=""
+persist.rild.nitz_plmn=""
+persist.rild.nitz_short_ons_0=""
+persist.rild.nitz_short_ons_1=""
+persist.rild.nitz_short_ons_2=""
+persist.rild.nitz_short_ons_3=""
+rild.libargs=-d /dev/smd0
+rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
+ril.subscription.types=NV,RUIM
+
+# Netmgr
+persist.data_netmgrd_mtu=1440
+persist.data.netmgrd.qos.enable=true
+ro.use_data_netmgrd=true

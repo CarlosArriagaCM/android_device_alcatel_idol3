@@ -5,5 +5,3 @@ PRODUCT_PACKAGES += \
     init.qcom.power.rc \
     init.qcom.rc \
     ueventd.qcom.rc
-
-

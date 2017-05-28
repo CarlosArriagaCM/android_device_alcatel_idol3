@@ -54,7 +54,7 @@ drm.service.enabled=1
 vidc.enc.narrow.searchrange=1
 
 # Factory reset protection
-ro.frp.pst=/dev/block/bootdevice/by-name/config
+#ro.frp.pst=/dev/block/bootdevice/by-name/config
 
 # Media
 media.stagefright.enable-player=true

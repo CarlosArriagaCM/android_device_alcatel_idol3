@@ -69,7 +69,6 @@ mmp.enable.3g2=true
 media.aac_51_output_enabled=true
 
 # Netmgr
-persist.data_netmgrd_mtu=1440
 persist.data.netmgrd.qos.enable=true
 ro.use_data_netmgrd=true
 
@@ -96,21 +95,17 @@ com.qc.hardware=true
 debug.qc.hardware=true
 
 # Radio
-ro.telephony.default_network=9
-telephony.lteOnGsmDevice=1
-DEVICE_PROVISIONED=1
-persist.data.qmi.adb_logmask=0
-persist.dbg.volte_avail_ovr=1
-persist.dbg.vt_avail_ovr=1
-persist.radio.apm_sim_not_pwdn=1
-persist.radio.custom_ecc=0
-persist.radio.manual_nw_rej_ct
-persist.radio.mns_with_all_rat=0
-persist.radio.orig_num_disp=false
-persist.radio.rat_on=combine
+rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so
 rild.libargs=-d /dev/smd0
-rild.libpath=/vendor/lib64/libril-qc-qmi-1.so
+persist.data.qmi.adb_logmask=0
+telephony.lteOnCdmaDevice=1
+persist.radio.rat_on=combine
 ril.subscription.types=NV,RUIM
+DEVICE_PROVISIONED=1
+persist.radio.custom_ecc=1
+persist.radio.ecc_hard_1=998
+persist.radio.ecc_hard_count=1
+ro.telephony.call_ring.multiple=false
 persist.radio.sib16_support=1
 
 # Screen density

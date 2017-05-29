@@ -61,6 +61,14 @@ on init
     chown root system /sys/class/sensors/kionix-accel/calibrate
     chown root system /sys/class/sensors/kionix-accel/poll_delay
 
+    chown root system /sys/class/sensors/tsl2772-als/enable
+    chown root system /sys/class/sensors/tsl2772-als/calibrate
+    chown root system /sys/class/sensors/tsl2772-als/poll_delay
+
+    chown root system /sys/class/sensors/tsl2772-ps/enable
+    chown root system /sys/class/sensors/tsl2772-ps/calibrate
+    chown root system /sys/class/sensors/tsl2772-ps/poll_delay
+
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -75,9 +83,6 @@ on post-fs
     chmod 0775 /tctpersist
     chown system system /persist/data
     chmod 0775 /persist/data
-
-    # Autoinstall
-    write /sys/class/android_usb/android0/f_mass_storage/rom/file /system/etc/USBDriver.iso
 
     # NFC
     chown nfc nfc /dev/bcm2079x
@@ -187,8 +192,9 @@ on post-fs-data
 
     # Sensor
     mkdir /persist/sensors 0770 system system
-    chown system system /sys/class/virtual-proximity/device/vendor
     chown system system /sys/class/virtual-proximity/device/enable
+    chown system system /sys/class/virtual-proximity/device/power
+    chown system system /sys/class/virtual-proximity/device/vendor
     chown system system /sys/class/virtual-proximity/device/proximity
 
     # Mark the copy complete flag to not completed

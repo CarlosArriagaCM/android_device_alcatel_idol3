@@ -60,6 +60,12 @@ vendor/lib/libflp.so
 vendor/lib/libgeofence.so
 vendor/lib/libizat_core.so
 vendor/lib/liblbs_core.so|06630679f05b1480bddcce0a6bea44e112ef328e
+vendor/lib/liblowi_client.so
+vendor/lib64/liblowi_client.so
+vendor/lib/liblowi_wifihal.so
+vendor/lib64/liblowi_wifihal.so
+vendor/lib/liblowi_wifihal_nl.so
+vendor/lib64/liblowi_wifihal_nl.so
 
 # Graphics
 vendor/lib64/egl/eglsubAndroid.so|b8314d91b88b317c41d36137c3afa12bf88676e6

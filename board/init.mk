@@ -1,0 +1,4 @@
+# Init
+TARGET_INIT_VENDOR_LIB := libinit_idol3
+TARGET_RECOVERY_DEVICE_MODULES := libinit_idol3
+TARGET_UNIFIED_DEVICE := true

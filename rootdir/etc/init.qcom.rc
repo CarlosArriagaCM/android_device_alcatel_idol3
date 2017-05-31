@@ -66,9 +66,19 @@ on init
     chown root system /sys/class/sensors/tsl2772-als/calibrate
     chown root system /sys/class/sensors/tsl2772-als/poll_delay
 
-    chown root system /sys/class/sensors/tsl2772-ps/enable
-    chown root system /sys/class/sensors/tsl2772-ps/calibrate
-    chown root system /sys/class/sensors/tsl2772-ps/poll_delay
+    # Add Proximity sensor system permissions.   
+    chown system system /sys/class/sensors/tsl2772-ps/calibrate
+    chown system system /sys/class/sensors/tsl2772-ps/enable
+    chown system system /sys/class/sensors/tsl2772-ps/enable_wakeup
+    chown system system /sys/class/sensors/tsl2772-ps/flush
+    chown system system /sys/class/sensors/tsl2772-ps/max_latency
+    chown system system /sys/class/sensors/tsl2772-ps/poll_delay
+    chmod 0660 /sys/class/sensors/tsl2772-ps/calibrate
+    chmod 0660 /sys/class/sensors/tsl2772-ps/enable
+    chmod 0660 /sys/class/sensors/tsl2772-ps/enable_wakeup
+    chmod 0660 /sys/class/sensors/tsl2772-ps/flush
+    chmod 0660 /sys/class/sensors/tsl2772-ps/max_latency
+    chmod 0660 /sys/class/sensors/tsl2772-ps/poll_delay
 
 on fs
     mount_all fstab.qcom

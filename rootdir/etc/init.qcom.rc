@@ -42,6 +42,7 @@ on init
     mkdir /persist 0771 system system
 
     # Support legacy paths
+    symlink /sdcard /mnt/sdcard
     symlink /sdcard /storage/sdcard0
 
     # Enable power off alarm
@@ -197,19 +198,6 @@ on post-fs-data
     chown system system /sys/class/virtual-proximity/device/vendor
     chown system system /sys/class/virtual-proximity/device/proximity
 
-    # Mark the copy complete flag to not completed
-    write /data/misc/radio/copy_complete 0
-    chown radio radio /data/misc/radio/copy_complete
-    chmod 0660 /data/misc/radio/copy_complete
-
-    # File flags for prebuilt ril db file
-    write /data/misc/radio/prebuilt_db_support 1
-    chown radio radio /data/misc/radio/prebuilt_db_support
-    chmod 0400 /data/misc/radio/prebuilt_db_support
-    write /data/misc/radio/db_check_done 0
-    chown radio radio /data/misc/radio/db_check_done
-    chmod 0660 /data/misc/radio/db_check_done
-
 service perfd /system/vendor/bin/perfd
     class main
     user root
@@ -357,6 +345,9 @@ on property:bluetooth.isEnabled=true
 on property:vold.decrypt=trigger_restart_framework
     start config_bt_addr
 
+on property:persist.env.fastdorm.enabled=true
+   setprop persist.radio.data_no_toggle 1
+
 #service cnd /system/bin/cnd
 #    class main
 #    socket cnd stream 660 root inet
@@ -374,10 +365,6 @@ service irsc_util /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
-
-service tftp_server /system/bin/tftp_server
-   class main
-   user root
 
 service config_bt_addr /system/bin/btnvtool -O
     class core
@@ -405,7 +392,7 @@ on property:hw.fm.init=1
 
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
-    class core
+    class main
     user root
     group radio audio bluetooth gps nfc qcom_diag
 
@@ -467,27 +454,13 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service ril-daemon /system/bin/rild
-    class main
-    socket rild stream 660 root radio
-    socket rild-debug stream 660 radio system
-    socket cutback stream 660 media radio
-    user root
-    group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag
-
-service ril-daemon2 /system/bin/rild -c 2
+service ril-daemon1 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
+    socket cutback stream 660 media radio
     user root
-    disabled
-    group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag
-
-service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
-    class late_start
-    user root
-    group root
-    oneshot
+    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
 
 service charger /charger
     class charger

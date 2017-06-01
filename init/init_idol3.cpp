@@ -141,7 +141,7 @@ void vendor_load_properties()
     } else if (curef_version.find("6045K") == 0) {
         /* 6045K */
         common_properties();
-        gsm_properties("9");
+        gsm_properties("9,1");
         msim_properties();
         property_set("ro.build.fingerprint", "TCL/6045K/idol3:6.0.1/MMB29M/v7VG6-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VG6-0 release-keys");

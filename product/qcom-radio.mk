@@ -4,8 +4,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.ecc_hard_1=998 \
     persist.radio.ecc_hard_count=1 \
     rild.libpath=/system/vendor/lib64/libril-qc-qmi-1.so \
-    rild.libargs=-d /dev/smd0 \
-    ro.telephony.default_network=9,1
+    rild.libargs=-d /dev/smd0
 
 # RIL
 ifeq ($(QCPATH),)

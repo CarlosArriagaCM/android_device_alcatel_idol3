@@ -92,20 +92,15 @@ void common_properties()
         property_set("ro.build.product", "idol3");
 }
 
-void gsm_properties(char const default_network[])
-{
-    property_set("ro.telephony.default_network", default_network);
-}
+void gsm_properties(bool msim);
 
 void vendor_load_properties()
 {
-    bool MSIM;
+    int rc;
 
     std::string platform = property_get("ro.board.platform");
     if (platform != ANDROID_TARGET)
         return;
-
-    MSIM = false;
 
     std::string curef_version = property_get("ro.cm.curef");
 
@@ -126,7 +121,6 @@ void vendor_load_properties()
     } else if (curef_version == "6045K") {
         /* 6045K */
         common_properties();
-        MSIM = true;
         gsm_properties("9");
         property_set("ro.build.fingerprint", "TCL/6045K/idol3:6.0.1/MMB29M/v7VG6-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VG6-0 release-keys");
@@ -148,14 +142,23 @@ void vendor_load_properties()
     } else {
         /* I806 */
         common_properties();
-        MSIM = true;
         gsm_properties("10");
         property_set("ro.build.fingerprint", "TCL/TCL_i806/idol3:5.0.2/LRX22G/v7TM4-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7TM4-0 release-keys");
         property_set("ro.product.model", "TCL i806");
     }
 
-    if (MSIM) {
+    std::string model = property_get("ro.product.model");
+    INFO("Found curef_version id %s setting build properties for %s model\n", curef_version.c_str(), model.c_str());
+    }
+
+void gsm_properties(bool msim)
+{
+    property_set("persist.radio.multisim.config", "");
+    property_set("ro.telephony.default_network", "9");
+    property_set("telephony.lteOnGsmDevice", "1");
+
+    if (msim) {
         property_set("persist.radio.force_get_pref", "1");
         property_set("persist.radio.multisim.config", "dsds");
         property_set("ro.telephony.ril.config", "simactivation");

@@ -131,6 +131,13 @@ void vendor_load_properties()
         property_set("ro.build.fingerprint", "TCL/6045B/idol3:5.0.2/LRX22G/v7SQX-0:user/release-keys");
         property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7SQX-0 release-keys");
         property_set("ro.product.model", "6045B");
+     } else if (curef_version.find("6045F") == 0) {
+        /* 6045F */
+        common_properties();
+        gsm_properties("10");
+        property_set("ro.build.fingerprint", "TCL/6045F/idol3:5.0.2/LRX22G/v7TM4-0:user/release-keys");
+        property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7TM4-0 release-keys");
+        property_set("ro.product.model", "6045F");
     } else if (curef_version.find("6045K") == 0) {
         /* 6045K */
         common_properties();
@@ -154,13 +161,11 @@ void vendor_load_properties()
         property_set("ro.build.description", "idol3-user 6.0.1 MMB29M v7VG6-0 release-keys");
         property_set("ro.product.model", "6045Y");
     } else {
-        /* I806 */
-        common_properties();
-        gsm_properties("10");
-        property_set("ro.build.fingerprint", "TCL/TCL_i806/idol3:5.0.2/LRX22G/v7TM4-0:user/release-keys");
-        property_set("ro.build.description", "idol3-user 5.0.2 LRX22G v7TM4-0 release-keys");
-        property_set("ro.product.model", "TCL i806");
-    } 
+       /* lolwtfbbq */
+       common_properties();
+       gsm_properties("9");
+       property_set("ro.product.model", "lolwtfbbq");
+    }
 
         std::string model = property_get("ro.product.model");
         INFO("Found curef_version id %s setting build properties for %s model\n", curef_version.c_str(), model.c_str());

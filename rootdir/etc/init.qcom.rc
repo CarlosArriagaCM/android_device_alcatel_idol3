@@ -99,8 +99,6 @@ on post-fs
     chown nfc nfc /dev/bcm2079x
     chmod 0660 /dev/bcm2079x
 
-    start set_variant
-
 # msm specific files that need to be created on /data
 on post-fs-data
 
@@ -325,6 +323,8 @@ on boot
 
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
+
+    start set_variant
 
     # Touchpanel
     chown root system /sys/class/tp_gesture/tp_device/tp_gesture_id

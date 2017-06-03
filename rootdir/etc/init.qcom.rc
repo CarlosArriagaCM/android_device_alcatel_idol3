@@ -79,8 +79,6 @@ on init
     chmod 0660 /sys/class/sensors/tsl2772-ps/max_latency
     chmod 0660 /sys/class/sensors/tsl2772-ps/poll_delay
 
-    start set_variant
-
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -349,6 +347,8 @@ on boot
     chown system system /sys/devices/virtual/graphics/fb0/rgb
     chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
 
+   start set_variant
+
 on property:bluetooth.isEnabled=true
     write /sys/class/bluetooth/hci0/idle_timeout 7000
 
@@ -565,7 +565,7 @@ on property:persist.sys.power_ctrl=0
     stop power_engine
 
 service set_variant /system/bin/sh /init.tct.variant.sh
-    class core
+    class main
     user root
     oneshot
     disabled

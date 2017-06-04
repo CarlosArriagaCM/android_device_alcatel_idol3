@@ -8,5 +8,6 @@ PRODUCT_PACKAGES += \
     init.qcom.sh \
     init.qcom-ims.rc \
     init.qcom.mem.sh \
+    init.tct.variant.sh \
     init.qti.ims.sh \
     ueventd.qcom.rc

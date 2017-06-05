@@ -1,2 +1,2 @@
 # Recovery
-TARGET_RECOVERY_FSTAB := device/alcatel/idol3/rootdir/etc/fstab.qcom
+TARGET_RECOVERY_FSTAB := $(LOCAL_PATH)/rootdir/etc/fstab.qcom

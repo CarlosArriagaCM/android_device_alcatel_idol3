@@ -12,7 +12,7 @@ dalvik.vm.image-dex2oat-threads=12
 # Audio
 ro.qc.sdk.audio.fluencetype=fluence
 persist.audio.fluence.voicecall=true
-persist.audio.fluence.voicerec=false
+persist.audio.fluence.voicerec=true
 persist.audio.fluence.speaker=true
 audio.offload.buffer.size.kb=64
 audio.offload.min.duration.secs=30

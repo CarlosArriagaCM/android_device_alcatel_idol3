@@ -17,6 +17,8 @@ LOCAL_PATH := device/alcatel/idol3
 
 TARGET_SPECIFIC_HEADER_PATH := $(LOCAL_PATH)/include
 
+# Asserts
+TARGET_OTA_ASSERT_DEVICE := 6045I,6045B,6045F,6045K,6045O,6045Y
 
 include device/alcatel/idol3/board/*.mk
 

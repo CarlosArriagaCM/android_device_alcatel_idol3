@@ -29,13 +29,14 @@ import init.qcom.power.rc
 import init.qcom.usb.rc
 
 on early-init
+    mount debugfs debugfs /sys/kernel/debug
+    chown system system /sys/kernel/debug
+    chmod 0755 /sys/kernel/debug
+
     mkdir /firmware 0771 system system
     mkdir /system 0777 root root
     mkdir /tctpersist 0500 root root
     symlink /data/tombstones /tombstones
-
-    mount debugfs debugfs /sys/kernel/debug
-    chmod 0755 /sys/kernel/debug
 
 on init
     # Set permissions for persist partition
@@ -137,7 +138,6 @@ on post-fs
 # msm specific files that need to be created on /data
 on post-fs-data
 
-    mkdir /data/fdAlbum 0770 camera camera
     mkdir /data/misc/camera 0770 camera camera
 
     mkdir /data/misc/ipa 0700 net_admin net_admin
@@ -236,7 +236,22 @@ on post-fs-data
     mkdir /data/nfc/param 0770 nfc nfc
 
     # Sensor
-    mkdir /persist/sensors 0770 system system
+    mkdir /persist/sensors 0775 system system
+    chmod 664 /persist/sensors/sensors_settings
+    chown system root /persist/sensors/sensors_settings
+
+    #Create FM dir for patchdownloader
+    mkdir /data/misc/fm 0770 system system
+    chmod 0770 /data/misc/fm
+
+    # Create directory for cutback
+    mkdir /data/misc/cutback 0770 radio wifi
+
+    # Create directory for fm_radio
+    mkdir /data/misc/fm_radio 0770 system system
+
+    # Setup folder for camera HAL subsystem
+    mkdir /data/camera_dump 0750 media media
 
 service perfd /system/vendor/bin/perfd
     class main
@@ -260,6 +275,12 @@ on early-boot
 
     write /sys/kernel/boot_adsp/boot 1
     chown root audio /sys/kernel/boot_adsp/boot
+
+    # SSR Setup
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
 
 on boot
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -289,6 +310,16 @@ on boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/device/extldo
     chmod 0660 /sys/class/rfkill/rfkill0/device/extldo
 
+   # File flags for prebuilt ril db file
+    write /data/misc/radio/prebuilt_db_support 1
+    chown radio radio /data/misc/radio/prebuilt_db_support
+    chmod 0400 /data/misc/radio/prebuilt_db_support
+    write /data/misc/radio/db_check_done 0
+    chown radio radio /data/misc/radio/db_check_done
+    chmod 0660 /data/misc/radio/db_check_done
+
+    start rmt_storage
+
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -302,6 +333,7 @@ on boot
     mkdir /persist/drm 0770 system system
     mkdir /persist/misc 0770 system system
     mkdir /persist/alarm 0770 system system
+    mkdir /persist/rfs 0770 system system
 
     #Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
@@ -320,26 +352,7 @@ on boot
     write /proc/sys/net/core/wmem_max  8388608
 
     #To allow interfaces to get v6 address when tethering is enabled
-    write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet2/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet3/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet4/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet5/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet6/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet7/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio0/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio1/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio2/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio3/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio4/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio5/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio6/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_sdio7/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_usb0/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_usb1/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_usb2/accept_ra 2
-    write /proc/sys/net/ipv6/conf/rmnet_usb3/accept_ra 2
+    write /proc/sys/net/ipv6/conf/default/accept_ra_defrtr 1
 
     # To prevent out of order acknowledgements from making
     # connection tracking to treat them as not belonging to
@@ -353,6 +366,10 @@ on boot
     # Set the default message loglevel to KERN_INFO
     write /proc/sys/kernel/printk "6 6 1 7"
 
+    # Change ownership and permission for vibrator
+    chown system system /sys/class/timed_output/vibrator/enable
+    chmod 0660 /sys/class/timed_output/vibrator/enable
+
     # Allow access for CCID command/response timeout configuration
     chown system system /sys/module/ccid_bridge/parameters/bulk_msg_timeout
 
@@ -362,8 +379,12 @@ on boot
 
     # Notification LED
     chown system system /sys/class/leds/led_G/brightness
+    chmod 0664 /sys/class/leds/led_G/brightness
     chown system system /sys/class/leds/led_G/blink
     chmod 0664 /sys/class/leds/led_G/blink
+
+    # Change permission for backlight
+    chmod 0664 /sys/class/leds/lcd-backlight/brightness
 
     # TFA9897
     chown system audio /dev/i2c-4
@@ -407,6 +428,8 @@ service irsc_util /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
+    group system wakelock
+    writepid /dev/cpuset/system-background/tasks
 
 service config_bt_addr /system/bin/btnvtool -O
     class core
@@ -502,14 +525,14 @@ service ril-daemon /system/bin/rild
     socket rild-debug stream 660 radio system
     socket cutback stream 660 media radio
     user root
-    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
+    group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag wakelock
 
-service ril-daemon2 /system/bin/rild -c 2
+service ril-daemon1 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_r sdcard_rw diag qcom_diag log
+    group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag wakelock
     disabled
 
 service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
@@ -597,7 +620,7 @@ on property:persist.sys.power_ctrl=0
     stop power_engine
 
 service set_variant /system/bin/sh /init.tct.variant.sh
-    class main
+    class core
     user root
     oneshot
     disabled

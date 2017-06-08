@@ -318,8 +318,6 @@ on boot
     chown radio radio /data/misc/radio/db_check_done
     chmod 0660 /data/misc/radio/db_check_done
 
-    start rmt_storage
-
     #Create QMUX deamon socket area
     mkdir /dev/socket/qmux_radio 0770 radio radio
     chmod 2770 /dev/socket/qmux_radio
@@ -429,7 +427,6 @@ service rmt_storage /system/bin/rmt_storage
     class core
     user root
     group system wakelock
-    writepid /dev/cpuset/system-background/tasks
 
 service config_bt_addr /system/bin/btnvtool -O
     class core
@@ -527,7 +524,7 @@ service ril-daemon /system/bin/rild
     user root
     group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag wakelock
 
-service ril-daemon1 /system/bin/rild -c 2
+service ril-daemon2 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system

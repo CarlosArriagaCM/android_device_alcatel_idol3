@@ -7,7 +7,8 @@ USE_SENSOR_MULTI_HAL := true
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/calmodule.cfg:system/vendor/etc/calmodule.cfg \
-    $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf
+    $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \
+    $(LOCAL_PATH)/sensors/sap.conf:system/etc/sap.conf
 
 # Permissions
 PRODUCT_COPY_FILES += \

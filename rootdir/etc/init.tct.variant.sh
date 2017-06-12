@@ -27,3 +27,5 @@
 #
 
 setprop ro.cm.curef `strings /dev/block/bootdevice/by-name/traceability 2>/dev/null | grep '6045' | cut -c4-8`
+
+echo "ro.cm.curef"

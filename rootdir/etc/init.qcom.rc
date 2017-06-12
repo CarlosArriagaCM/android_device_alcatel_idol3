@@ -116,6 +116,11 @@ on init
     chmod 0660 /sys/class/sensors/tsl2772-ps/max_latency
     chmod 0660 /sys/class/sensors/tsl2772-ps/poll_delay
 
+    # Test drive idol3 4.7" proximity driver
+    chown root system /sys/class/sensors/tsl27723-ps/enable
+    chown root system /sys/class/sensors/tsl27723-ps/calibrate
+    chown root system /sys/class/sensors/tsl27723-ps/poll_delay
+
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -239,6 +244,9 @@ on post-fs-data
     mkdir /persist/sensors 0775 system system
     chmod 664 /persist/sensors/sensors_settings
     chown system root /persist/sensors/sensors_settings
+    chown system system /sys/class/virtual-proximity/device/vendor
+    chown system system /sys/class/virtual-proximity/device/enable
+    chown system system /sys/class/virtual-proximity/device/proximity
 
     #Create FM dir for patchdownloader
     mkdir /data/misc/fm 0770 system system

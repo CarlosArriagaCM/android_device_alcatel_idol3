@@ -1,10 +1,3 @@
-# Sensors
-PRODUCT_PACKAGES += \
-    libcalmodule_common \
-    sensors.msm8916
-
-USE_SENSOR_MULTI_HAL := true
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/calmodule.cfg:system/vendor/etc/calmodule.cfg \
     $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \

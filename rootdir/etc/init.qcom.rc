@@ -116,11 +116,6 @@ on init
     chmod 0660 /sys/class/sensors/tsl2772-ps/max_latency
     chmod 0660 /sys/class/sensors/tsl2772-ps/poll_delay
 
-    # Test drive idol3 4.7" proximity driver
-    chown root system /sys/class/sensors/tsl27723-ps/enable
-    chown root system /sys/class/sensors/tsl27723-ps/calibrate
-    chown root system /sys/class/sensors/tsl27723-ps/poll_delay
-
 on fs
     mount_all fstab.qcom
     mkdir /persist/data 0700 system system
@@ -478,6 +473,12 @@ on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target
     stop netmgrd
 
+service sensors /system/bin/sensors.qcom
+    class late_start
+    user root
+    group root
+    disabled
+
 # Adjust socket buffer to enlarge TCP receive window for high bandwidth
 # but only if ro.data.large_tcp_window_size property is set.
 on property:ro.data.large_tcp_window_size=true
@@ -529,19 +530,21 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service ril-daemon1 /system/bin/rild -c 2
+service ril-daemon2 /system/bin/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
     user root
-    group radio cache inet misc audio sdcard_rw sensors qcom_diag log net_raw diag wakelock
     disabled
+    group radio cache inet misc audio sdcard_r sdcard_rw qcom_diag log
 
-service rild2-wrapper /system/bin/sh /system/etc/init.qcom.ril.sh
-    class late_start
+service ril-daemon3 /system/bin/rild -c 3
+    class main
+    socket rild3 stream 660 root radio
+    socket rild-debug3 stream 660 radio system
     user root
-    group root
-    oneshot
+    disabled
+    group radio cache inet misc audio sdcard_r sdcard_rw qcom_diag log
 
 service charger /charger
     class charger

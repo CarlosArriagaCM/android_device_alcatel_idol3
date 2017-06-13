@@ -229,6 +229,8 @@ vendor/lib64/libcalmodule_gyroscope.so
 vendor/lib/libcalmodule_akm.so
 vendor/lib/libcalmodule_common.so
 vendor/lib/libcalmodule_gyroscope.so
+vendor/lib/mmi_sensor.so
+vendor/lib64/mmi_sensor.so
 
 # Thermal
 vendor/bin/thermal-engine

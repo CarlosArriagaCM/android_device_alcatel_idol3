@@ -472,10 +472,13 @@ etc/firmware/a420_pm4.fw
 # NFC firmware
 vendor/firmware/BCM20795A1_001.002.012.0003.0110_Generic_I2C_NCD_Unsigned_configdata.ncd
 vendor/firmware/BCM20795A2_001.003.025.0005.0050_Generic_I2C_NCD_Unsigned_configdata.ncd
+vendor/firmware/BCM20795A2_001.003.025.0005.0049_Generic_I2C_NCD_Unsigned_configdata.ncd
 
 # Sensors
 lib64/hw/lights.msm8916.so
 lib/hw/lights.msm8916.so
+lib/hw/sensors.msm8916.so
+lib64/hw/sensors.msm8916.so
 
 # Signed Venus (media) firmware
 etc/firmware/venus.b00

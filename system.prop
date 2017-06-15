@@ -46,7 +46,6 @@ debug.enable.sglscale=1
 debug.mdpcomp.idletime=600
 persist.hwc.mdpcomp.enable=true
 persist.hwc.ptor.enable=true
-ro.opengles.version=196609
 ro.qualcomm.cabl=2
 
 # DRM

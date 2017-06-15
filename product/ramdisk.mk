@@ -10,4 +10,5 @@ PRODUCT_PACKAGES += \
     init.qcom.mem.sh \
     init.tct.variant.sh \
     init.qti.ims.sh \
-    ueventd.qcom.rc
+    ueventd.qcom.rc \
+    init.qcom.opengles.sh

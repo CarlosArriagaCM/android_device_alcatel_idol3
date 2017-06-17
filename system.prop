@@ -35,10 +35,8 @@ ro.qualcomm.bluetooth.opp=true
 ro.qualcomm.bluetooth.pbap=true
 ro.qualcomm.bt.hci_transport=smd
 
-# Camera
-persist.camera.cpp.duplication=false
-persist.camera.hal.debug.mask=0
-persist.camera.pip.support=0
+# Needed for MTP 
+ro.sys.usb.rps_mask=10
 
 # Display
 debug.composition.type=c2d
@@ -49,23 +47,11 @@ persist.hwc.ptor.enable=true
 ro.qualcomm.cabl=2
 
 # DRM
-drm.service.enabled=1
-vidc.enc.narrow.searchrange=1
+# drm.service.enabled=1
+# vidc.enc.narrow.searchrange=1
 
 # Factory reset protection
 #ro.frp.pst=/dev/block/bootdevice/by-name/config
-
-# Media
-media.stagefright.enable-player=true
-media.stagefright.enable-http=true
-media.stagefright.enable-aac=true
-media.stagefright.enable-qcp=true
-media.stagefright.enable-fma2dp=true
-media.stagefright.enable-scan=true
-media.msm8939hw=0
-mm.enable.smoothstreaming=true
-mmp.enable.3g2=true
-media.aac_51_output_enabled=true
 
 # Netmgr
 persist.data.netmgrd.qos.enable=true
@@ -88,7 +74,3 @@ ro.sf.lcd_density=480
 # Wifi
 ro.disableWifiApFirmwareReload=true
 wifi.interface=wlan0
-
-# WiFi Display
-persist.debug.wfd.enable=1
-persist.sys.wfd.virtual=0

@@ -2,7 +2,6 @@
 PRODUCT_PACKAGES += \
     fstab.qcom \
     init.qcom.mem.sh \
-    init.qcom.ril.sh \
     init.qcom.bt.sh \
     init.tct.variant.sh \
     init.qcom.power.rc \

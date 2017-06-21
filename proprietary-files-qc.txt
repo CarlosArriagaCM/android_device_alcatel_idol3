@@ -221,6 +221,10 @@ vendor/lib64/libxml.so
 vendor/qcril.db
 
 # Sensors
+lib64/hw/lights.msm8916.so
+lib/hw/lights.msm8916.so
+lib/hw/sensors.msm8916.so
+lib64/hw/sensors.msm8916.so
 lib64/sensors.native.so
 lib/sensors.native.so
 vendor/lib64/libcalmodule_akm.so
@@ -231,6 +235,9 @@ vendor/lib/libcalmodule_common.so
 vendor/lib/libcalmodule_gyroscope.so
 vendor/lib/mmi_sensor.so
 vendor/lib64/mmi_sensor.so
+etc/sensors/hals.conf
+vendor/etc/calmodule.cfg
+etc/sap.conf
 
 # Thermal
 vendor/bin/thermal-engine
@@ -245,9 +252,6 @@ bin/time_daemon
 -vendor/lib/libtime_genoff.so
 vendor/lib64/libTimeService.so
 vendor/lib/libTimeService.so
-
-# USB
-etc/USBDriver.iso
 
 # Widevine
 vendor/lib/drm/libdrmwvmplugin.so|3bee766222895f524421eb996ca6a08bcf95f19f

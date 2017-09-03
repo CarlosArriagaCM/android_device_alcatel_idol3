@@ -45,6 +45,8 @@ on init
     # Support legacy paths
     symlink /sdcard /storage/sdcard0
 
+    start qcom-opengles
+
     # Enable power off alarm
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
@@ -613,6 +615,3 @@ service set_variant /system/bin/sh /init.tct.variant.sh
 service qcom-mem /system/bin/sh /system/etc/init.qcom.mem.sh
     disabled
     oneshot
-
-on load_system_props_action
-    start qcom-opengles

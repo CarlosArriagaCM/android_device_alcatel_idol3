@@ -19,3 +19,6 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 PRODUCT_DEVICE := idol3
 PRODUCT_NAME := lineage_idol3
+
+# Unofficial Build ID
+TARGET_UNOFFICIAL_BUILD_ID := CarlosArriaga

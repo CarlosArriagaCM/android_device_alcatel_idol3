@@ -7,7 +7,8 @@ BOARD_KERNEL_TAGS_OFFSET := 0x00000100
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_APPEND_DTB := true
 TARGET_KERNEL_SOURCE := kernel/alcatel/msm8916
-TARGET_KERNEL_CONFIG := idol3_defconfig
+TARGET_KERNEL_CONFIG := lineage_idol3_defconfig
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+
 # Platform
 TARGET_BOARD_PLATFORM := msm8916

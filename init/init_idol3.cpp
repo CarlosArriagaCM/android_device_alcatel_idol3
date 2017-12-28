@@ -31,12 +31,13 @@
 
 #include <android-base/strings.h>
 
+#include <android-base/properties.h>
 #include "vendor_init.h"
 #include "property_service.h"
-#include "log.h"
-#include "util.h"
 
 using android::base::Trim;
+using android::base::GetProperty;
+using android::init::property_set;
 
 void init_alarm_boot_properties()
 {
@@ -96,11 +97,11 @@ void vendor_load_properties()
 {
     int rc;
 
-    std::string platform = property_get("ro.board.platform");
+    std::string platform = GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)
         return;
 
-    std::string curef_version = property_get("ro.cm.curef");
+    std::string curef_version = GetProperty("ro.cm.curef", "");
 
     if (curef_version == "6045I") {
         /* 6045I (North America) */
@@ -152,7 +153,6 @@ void vendor_load_properties()
        property_set("ro.product.model", "TCL IDOL3");
     }
 
-        std::string model = property_get("ro.product.model");
-        INFO("Found curef_version id %s setting build properties for %s model\n", curef_version.c_str(), model.c_str());
+        std::string model = GetProperty("ro.product.model", "");
     }
 

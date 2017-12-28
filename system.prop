@@ -38,6 +38,7 @@ debug.mdpcomp.idletime=600
 persist.hwc.mdpcomp.enable=true
 persist.hwc.ptor.enable=true
 ro.qualcomm.cabl=2
+persist.media.treble_omx=false
 
 # DRM
 # drm.service.enabled=1

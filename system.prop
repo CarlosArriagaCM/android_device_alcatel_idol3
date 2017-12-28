@@ -40,6 +40,9 @@ persist.hwc.ptor.enable=true
 ro.qualcomm.cabl=2
 persist.media.treble_omx=false
 
+# Shutdown timeout
+ro.build.shutdown_timeout=0
+
 # DRM
 # drm.service.enabled=1
 # vidc.enc.narrow.searchrange=1

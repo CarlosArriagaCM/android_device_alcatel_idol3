@@ -5,8 +5,6 @@ PRODUCT_COPY_FILES += \
 
 # Wifi
 PRODUCT_PACKAGES += \
-    libqsap_sdk \
-    libQWiFiSoftApCfg \
     libwcnss_qmi \
     wcnss_service \
     wificond

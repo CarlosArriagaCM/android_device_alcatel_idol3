@@ -93,7 +93,6 @@ void msim_properties()
 
 void vendor_load_properties()
 {
-    int rc;
 
     std::string platform = GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)

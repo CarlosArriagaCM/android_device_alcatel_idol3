@@ -1,7 +1,15 @@
+# Vibrator
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator@1.0-impl
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/sensors/calmodule.cfg:system/vendor/etc/calmodule.cfg \
     $(LOCAL_PATH)/sensors/hals.conf:system/etc/sensors/hals.conf \
     $(LOCAL_PATH)/sensors/sap.conf:system/etc/sap.conf
+
+# Sensors
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl
 
 # Permissions
 PRODUCT_COPY_FILES += \

@@ -10,10 +10,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-# Sensors
-PRODUCT_PACKAGES += \
-    android.hardware.sensors@1.0-impl
-
 # Display
 PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator@2.0-impl \

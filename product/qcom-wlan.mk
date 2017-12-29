@@ -8,7 +8,8 @@ PRODUCT_PACKAGES += \
     libwcnss_qmi \
     wcnss_service \
     libwpa_client
-    wificond
+    wificond \
+    wifilogd \
 
 # WiFi HAL
 PRODUCT_PACKAGES += \

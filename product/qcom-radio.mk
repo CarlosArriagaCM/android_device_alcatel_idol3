@@ -22,9 +22,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/sec_config:system/etc/sec_config
 
 PRODUCT_PACKAGES += \
+    libcnefeatureconfig \
     librmnetctl \
     libxml2 \
-    libshim_ril
+    libshim_ril \
+    rild_socket
 
 # Telephony packages
 PRODUCT_PACKAGES += \

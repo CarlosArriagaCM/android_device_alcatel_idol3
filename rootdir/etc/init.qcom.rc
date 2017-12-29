@@ -391,18 +391,18 @@ on boot
     chown system audio /sys/class/tfa9897/control/tfa9897_switch1
     chown system audio /sys/class/tfa9897/control/tfa9897_switch2
 
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/wlan/parameters/fwpath
+    chown wifi wifi /sys/module/bcmdhd/parameters/firmware_path
+
     # Color
     chown system system /sys/devices/virtual/graphics/fb0/rgb
     chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
 
-   start set_variant
+    start set_variant
 
 on property:bluetooth.isEnabled=true
     write /sys/class/bluetooth/hci0/idle_timeout 7000
-
-    # Wifi firmware reload path
-    chown wifi wifi /sys/module/wlan/parameters/fwpath
-    chown wifi wifi /sys/module/bcmdhd/parameters/firmware_path
 
 on property:vold.decrypt=trigger_restart_framework
     start config_bt_addr

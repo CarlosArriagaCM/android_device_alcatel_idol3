@@ -7,7 +7,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libwcnss_qmi \
     wcnss_service \
-    libwpa_client
+    libwpa_client \
     wificond \
     wifilogd \
 

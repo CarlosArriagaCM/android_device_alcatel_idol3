@@ -25,3 +25,10 @@ PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2 \
     libshim_ril
+
+# Telephony packages
+PRODUCT_PACKAGES += \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext

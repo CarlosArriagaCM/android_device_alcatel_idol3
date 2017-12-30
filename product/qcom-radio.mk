@@ -27,10 +27,3 @@ PRODUCT_PACKAGES += \
     libxml2 \
     libshim_ril \
     rild_socket
-
-# Telephony packages
-PRODUCT_PACKAGES += \
-    telephony-ext
-
-PRODUCT_BOOT_JARS += \
-    telephony-ext

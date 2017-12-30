@@ -26,3 +26,4 @@ PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2 \
     libshim_ril \
+    rild_socket

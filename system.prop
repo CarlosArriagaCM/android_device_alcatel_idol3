@@ -69,5 +69,4 @@ debug.qc.hardware=true
 ro.sf.lcd_density=480
 
 # Wifi
-ro.disableWifiApFirmwareReload=true
 wifi.interface=wlan0

@@ -1,5 +1,5 @@
 # ADSP
-bin/adsprpcd
+bin/adsprpcd:vendor/bin/adsprpcd
 vendor/lib64/libadsprpc.so
 vendor/lib/libadsprpc.so
 vendor/lib/libfastcvopt.so
@@ -28,12 +28,12 @@ vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
 
 # Bluetooth
-bin/btnvtool
-bin/hci_qcomm_init
+bin/btnvtool:vendor/bin/btnvtool
+bin/hci_qcomm_init:vendor/bin/hci_qcomm_init
 vendor/lib64/libbtnv.so
 
 # DRM
-bin/qseecomd
+bin/qseecomd:vendor/bin/qseecomd
 #lib/libdrmdecrypt.so
 vendor/lib64/libdrmfs.so
 vendor/lib64/libdrmtime.so
@@ -45,9 +45,9 @@ vendor/lib64/libssd.so
 vendor/lib64/hw/gatekeeper.msm8916.so
 
 # GPS
-bin/garden_app
-bin/gpsone_daemon
-bin/lowi-server
+bin/garden_app:vendor/bin/garden_app
+bin/gpsone_daemon:vendor/bin/gpsone_daemon
+bin/lowi-server:vendor/bin/lowi-server
 lib64/libloc_api_v02.so|5ed3d95aedcc908e830a1ce948881e4a3d3741cc
 lib/libloc_api_v02.so|2498ed99d78a4bcf94aee4fd3ee9e460cb4f331e
 vendor/lib64/hw/flp.default.so
@@ -131,17 +131,17 @@ vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxQcelp13Dec.so
 
 # Perf
-bin/msm_irqbalance
-bin/power_engine
+bin/msm_irqbalance:vendor/bin/msm_irqbalance
+bin/power_engine:vendor/bin/power_engine
 
 # Peripheral manager
-bin/pm-service
+bin/pm-service:vendor/bin/pm-service
 vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Postprocessing
 -app/colorservice/colorservice.apk|38806e1689097f00080ae4e37da132ac5e810149
-bin/mm-pp-daemon
+bin/mm-pp-daemon:vendor/bin/mm-pp-daemon
 etc/permissions/com.qti.snapdragon.sdk.display.xml
 -framework/com.qti.snapdragon.sdk.display.jar|4e26056d40946f61681b2176a513ec3a4a7e1ba3
 vendor/lib64/libdisp-aba.so
@@ -153,7 +153,7 @@ vendor/lib64/libmm-qdcm.so
 vendor/lib64/libsd_sdk_display.so
 
 # Qualcomm framework
-bin/irsc_util
+bin/irsc_util:vendor/bin/irsc_util
 vendor/lib64/libdiag.so
 vendor/lib64/libdsi_netctrl.so
 vendor/lib64/libdsutils.so
@@ -190,12 +190,11 @@ vendor/lib/libsmemlog.so
 # Radio
 -app/shutdownlistener/shutdownlistener.apk|0f31f4d712b90c5cf61f2e31f0aa17eb1dcb86f6
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|74e4ce80895a11da496a08513a2742eac6a66248
-bin/netmgrd
-bin/qmuxd
-bin/radish
-bin/rild
-bin/rmt_storage
-bin/tftp_server
+bin/netmgrd:vendor/bin/netmgrd
+bin/qmuxd:vendor/bin/qmuxd
+bin/radish:vendor/bin/radish
+bin/rmt_storage:vendor/bin/rmt_storage
+bin/tftp_server:vendor/bin/tftp_server
 etc/data/dsi_config.xml
 etc/data/netmgr_config.xml
 etc/data/qmi_config.xml
@@ -205,8 +204,6 @@ etc/permissions/qcrilhook.xml
 -framework/qcrilhook.jar|bfd6c146334249f4505039ad3f7fdde00be5e661
 lib64/libnetd_client.so
 lib/libnetd_client.so
-lib64/libril.so
-lib/libril.so
 vendor/lib64/libcneapiclient.so
 vendor/lib64/libconfigdb.so
 vendor/lib64/libmdmdetect.so
@@ -247,7 +244,7 @@ vendor/lib64/libthermalioctl.so
 
 # Time services
 -app/TimeService/TimeService.apk|955648501f6d363d5c495f163776dc8fac485432
-bin/time_daemon
+bin/time_daemon:vendor/bin/time_daemon
 -vendor/lib64/libtime_genoff.so
 -vendor/lib/libtime_genoff.so
 vendor/lib64/libTimeService.so

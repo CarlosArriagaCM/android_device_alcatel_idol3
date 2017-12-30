@@ -28,7 +28,7 @@ lib64/libtfa9897.so
 lib/libtfa9897.so
 
 # Camera
-bin/mm-qcamera-daemon
+bin/mm-qcamera-daemon:vendor/bin/mm-qcamera-daemon
 lib/hw/camera.msm8916.so
 lib/libFastFocus.so
 lib/libfn.fastfocus.so

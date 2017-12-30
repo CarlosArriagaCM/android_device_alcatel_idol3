@@ -15,3 +15,4 @@
  */
 
 void ril_service_name() {}
+void ril_service_name_base() {}

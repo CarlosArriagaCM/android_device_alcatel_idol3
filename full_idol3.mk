@@ -26,5 +26,5 @@ $(call inherit-product, device/alcatel/idol3/device.mk)
 PRODUCT_DEVICE := idol3
 PRODUCT_NAME := full_idol3
 PRODUCT_BRAND := TCL
-PRODUCT_MODEL := idol3
+PRODUCT_MODEL := Alcatel Idol 3
 PRODUCT_MANUFACTURER := TCL

@@ -24,5 +24,4 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libcnefeatureconfig \
     librmnetctl \
-    libxml2 \
-    libshim_ril \
+    libxml2

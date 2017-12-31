@@ -1,4 +1,4 @@
-Copyright 2015 - The CyanogenMod Project
+Copyright 2018 - The LineageOS Project
 
 Device configuration for Alcatel ONETOUCH Idol 3 5.5.
 =====================================

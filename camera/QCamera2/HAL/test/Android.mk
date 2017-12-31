@@ -1,3 +1,5 @@
+ifeq (0,1)
+
 LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -18,7 +20,7 @@ LOCAL_SHARED_LIBRARIES:= \
     libskia \
     libstagefright \
     libstagefright_foundation \
-		liblog
+    liblog
 
 ifneq ($(call is-platform-sdk-version-at-least,18),true)
 
@@ -53,3 +55,4 @@ LOCAL_CFLAGS += -O0
 
 include $(BUILD_EXECUTABLE)
 
+endif

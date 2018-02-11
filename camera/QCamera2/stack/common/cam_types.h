@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -52,7 +52,7 @@
 #define CEILING2(X)  (((X) + 0x0001) & 0xFFFE)
 
 #define MAX_ZOOMS_CNT 79
-#define MAX_SIZES_CNT 24
+#define MAX_SIZES_CNT 26
 #define MAX_EXP_BRACKETING_LENGTH 32
 #define MAX_ROI 5
 #define MAX_STREAM_NUM_IN_BUNDLE 4
@@ -851,7 +851,6 @@ typedef struct {
     cam_focus_distances_info_t focus_dist;       /* focus distance */
     int32_t focus_pos;
     uint32_t focused_frame_idx;
-    cam_focus_mode_type focus_mode;        /* focus mode from backend */
 } cam_auto_focus_data_t;
 
 typedef struct {
@@ -902,10 +901,6 @@ typedef struct {
     cam_flash_mode_t flash_mode;
     cam_sensor_t sens_type;
     float aperture_value;
-    float            focal_length;
-    float            f_number;
-    int              sensing_method;
-    float            crop_factor;
 } cam_sensor_params_t;
 
 typedef enum {
@@ -927,11 +922,6 @@ typedef struct {
     uint32_t settled;
     uint32_t exp_index;
     uint32_t line_count;
-    uint32_t metering_mode;
-    uint32_t exposure_program;
-    uint32_t exposure_mode;
-    uint32_t scenetype;
-    float brightness;
 } cam_ae_params_t;
 
 typedef struct {
@@ -1039,9 +1029,13 @@ typedef  struct {
     uint8_t is_ae_params_valid;
     cam_ae_params_t ae_params;
 
+    uint8_t vendor_magic[16];
+
     /* AWB parameters */
     uint8_t is_awb_params_valid;
     cam_awb_params_t awb_params;
+
+    uint8_t vendor_magic2[12];
 
     /* AE exif debug parameters */
     uint8_t is_ae_exif_debug_valid;
@@ -1188,7 +1182,6 @@ typedef enum {
     CAM_INTF_PARM_CDS_MODE,
     CAM_INTF_PARM_WB_MANUAL,
     CAM_INTF_PARM_LONGSHOT_ENABLE,
-    CAM_INTF_PARM_LOW_POWER_ENABLE,
 
     /* stream based parameters */
     CAM_INTF_PARM_DO_REPROCESS,
@@ -1517,7 +1510,6 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FSSR           (1U<<18)
 #define CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS (1U<<19)
 #define CAM_QCOM_FEATURE_SENSOR_HDR     (1U<<20)
-#define CAM_QCOM_FEATURE_REFOCUS        (1U<<21)
 
 // Debug mask
 #define HAL_DEBUG_MASK_HAL                 (1U<<0)

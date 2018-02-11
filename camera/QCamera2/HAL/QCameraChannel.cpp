@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -766,43 +766,6 @@ QCameraVideoChannel::~QCameraVideoChannel()
 }
 
 /*===========================================================================
- * FUNCTION   : takePicture
- *
- * DESCRIPTION: send request for queued snapshot frames
- *
- * PARAMETERS :
- *   @num_of_snapshot : number of snapshot frames requested
- *
- * RETURN     : int32_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
- *==========================================================================*/
-int32_t QCameraVideoChannel::takePicture(uint8_t num_of_snapshot)
-{
-    int32_t rc = m_camOps->request_super_buf(m_camHandle,
-                                             m_handle,
-                                             num_of_snapshot);
-    return rc;
-}
-
-/*===========================================================================
- * FUNCTION   : cancelPicture
- *
- * DESCRIPTION: cancel request for queued snapshot frames
- *
- * PARAMETERS : none
- *
- * RETURN     : int32_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
- *==========================================================================*/
-int32_t QCameraVideoChannel::cancelPicture()
-{
-    int32_t rc = m_camOps->cancel_super_buf_request(m_camHandle, m_handle);
-    return rc;
-}
-
-/*===========================================================================
  * FUNCTION   : releaseFrame
  *
  * DESCRIPTION: return video frame from app
@@ -934,12 +897,8 @@ int32_t QCameraReprocessChannel::addReprocStreamsFromSource(
                 if (!param.needThumbnailReprocess(&feature_mask)) {
                     continue;
                 }
-                // CAC, SHARPNESS, FLIP and WNR would have been already applied -
-                // on preview/postview stream in realtime. Need not apply again.
-                feature_mask &= ~(CAM_QCOM_FEATURE_DENOISE2D |
-                        CAM_QCOM_FEATURE_CAC |
-                        CAM_QCOM_FEATURE_SHARPNESS |
-                        CAM_QCOM_FEATURE_FLIP);
+                //Don't do WNR for thumbnail
+                feature_mask &= ~CAM_QCOM_FEATURE_DENOISE2D;
                 if (!feature_mask) {
                     // Skip thumbnail stream reprocessing since no other
                     //reprocessing is enabled.

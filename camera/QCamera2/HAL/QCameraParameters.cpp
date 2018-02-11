@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -122,6 +122,8 @@ const char QCameraParameters::KEY_QC_SELECTABLE_ZONE_AF[] = "selectable-zone-af"
 const char QCameraParameters::KEY_QC_CAPTURE_BURST_EXPOSURE[] = "capture-burst-exposures";
 const char QCameraParameters::KEY_QC_NUM_SNAPSHOT_PER_SHUTTER[] = "num-snaps-per-shutter";
 const char QCameraParameters::KEY_QC_NO_DISPLAY_MODE[] = "no-display-mode";
+const char QCameraParameters::KEY_QC_LOW_POWER_MODE[] = "low-power-mode";
+const char QCameraParameters::KEY_QC_LOW_POWER_MODE_SUPPORTED[] = "low-power-mode-supported";
 const char QCameraParameters::KEY_QC_RAW_PICUTRE_SIZE[] = "raw-size";
 const char QCameraParameters::KEY_QC_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES[] = "skinToneEnhancement-values";
 const char QCameraParameters::KEY_QC_SUPPORTED_LIVESNAPSHOT_SIZES[] = "supported-live-snapshot-sizes";
@@ -145,6 +147,8 @@ const char QCameraParameters::KEY_QC_CDS_MODE[] = "cds-mode";
 const char QCameraParameters::KEY_QC_VIDEO_ROTATION[] = "video-rotation";
 const char QCameraParameters::KEY_QC_AF_BRACKET[] = "af-bracket";
 const char QCameraParameters::KEY_QC_SUPPORTED_AF_BRACKET_MODES[] = "af-bracket-values";
+const char QCameraParameters::KEY_QC_RE_FOCUS[] = "re-focus";
+const char QCameraParameters::KEY_QC_SUPPORTED_RE_FOCUS_MODES[] = "re-focus-values";
 const char QCameraParameters::KEY_QC_CHROMA_FLASH[] = "chroma-flash";
 const char QCameraParameters::KEY_QC_SUPPORTED_CHROMA_FLASH_MODES[] = "chroma-flash-values";
 const char QCameraParameters::KEY_QC_OPTI_ZOOM[] = "opti-zoom";
@@ -357,6 +361,10 @@ const char QCameraParameters::AE_BRACKET[] = "AE-Bracket";
 // Values for AF Bracketing setting.
 const char QCameraParameters::AF_BRACKET_OFF[] = "af-bracket-off";
 const char QCameraParameters::AF_BRACKET_ON[] = "af-bracket-on";
+
+// Values for Refocus setting.
+const char QCameraParameters::RE_FOCUS_OFF[] = "re-focus-off";
+const char QCameraParameters::RE_FOCUS_ON[] = "re-focus-on";
 
 // Values for Chroma Flash setting.
 const char QCameraParameters::CHROMA_FLASH_OFF[] = "chroma-flash-off";
@@ -677,6 +685,12 @@ const QCameraParameters::QCameraMap<int>
 };
 
 const QCameraParameters::QCameraMap<int>
+        QCameraParameters::RE_FOCUS_MODES_MAP[] = {
+    { RE_FOCUS_OFF, 0 },
+    { RE_FOCUS_ON,  1 }
+};
+
+const QCameraParameters::QCameraMap<int>
         QCameraParameters::CHROMA_FLASH_MODES_MAP[] = {
     { CHROMA_FLASH_OFF, 0 },
     { CHROMA_FLASH_ON,  1 }
@@ -769,6 +783,7 @@ QCameraParameters::QCameraParameters()
       m_bHDROutputCropEnabled(false),
       m_tempMap(),
       m_bAFBracketingOn(false),
+      m_bReFocusOn(false),
       m_bMultiTouchFocusOn(false),
       m_bChromaFlashOn(false),
       m_bOptiZoomOn(false),
@@ -783,6 +798,7 @@ QCameraParameters::QCameraParameters()
       m_bTruePortraitOn(false),
       m_bSensorHDREnabled(false),
       m_bIsLowMemoryDevice(false),
+      m_bLowPowerMode(false),
       m_bIsLongshotLimited(false),
       m_nMaxLongshotNum(-1),
       mFocusState(CAM_AF_NOT_FOCUSED)
@@ -866,6 +882,7 @@ QCameraParameters::QCameraParameters(const String8 &params)
     m_bHDROutputCropEnabled(false),
     m_tempMap(),
     m_bAFBracketingOn(false),
+    m_bReFocusOn(false),
     m_bMultiTouchFocusOn(false),
     m_bChromaFlashOn(false),
     m_bOptiZoomOn(false),
@@ -879,6 +896,7 @@ QCameraParameters::QCameraParameters(const String8 &params)
     m_bTruePortraitOn(false),
     m_bSensorHDREnabled(false),
     m_bIsLowMemoryDevice(false),
+    m_bLowPowerMode(false),
     m_bIsLongshotLimited(false),
     m_nMaxLongshotNum(-1),
     mFocusState(CAM_AF_NOT_FOCUSED)
@@ -1546,6 +1564,22 @@ int32_t QCameraParameters::setLiveSnapshotSize(const QCameraParameters& params)
             }
         }
     }
+
+    // QCamera is guaranteed to support liveshot at video resolution, even
+    // though it may not appear in the livesnapshot_sizes_tbl.  In L, if the
+    // user sets a picture size larger than the supported liveshot resolution,
+    // the resulting liveshot MUST be at least as large as the video
+    // resolution (android.hardware.cts.CameraTest#testVideoSnapshot).
+    int videoWidth = 0, videoHeight = 0;
+    int pictureWidth = 0, pictureHeight = 0;
+    params.getVideoSize(&videoWidth, &videoHeight);
+    params.getPictureSize(&pictureWidth, &pictureHeight);
+    if ((pictureWidth > m_LiveSnapshotSize.width && m_LiveSnapshotSize.width < videoWidth) ||
+        (pictureHeight > m_LiveSnapshotSize.height && m_LiveSnapshotSize.height < videoHeight)) {
+        m_LiveSnapshotSize.width = videoWidth;
+        m_LiveSnapshotSize.height = videoHeight;
+    }
+
     CDBG("%s: live snapshot size %d x %d", __func__,
           m_LiveSnapshotSize.width, m_LiveSnapshotSize.height);
 
@@ -3212,7 +3246,7 @@ int32_t QCameraParameters::setAEBracket(const QCameraParameters& params)
 int32_t QCameraParameters::setAFBracket(const QCameraParameters& params)
 {
     if ((m_pCapability->qcom_supported_feature_mask &
-        CAM_QCOM_FEATURE_UBIFOCUS) == 0){
+            CAM_QCOM_FEATURE_UBIFOCUS) == 0){
         CDBG("%s: AF Bracketing is not supported",__func__);
         return NO_ERROR;
     }
@@ -3224,6 +3258,38 @@ int32_t QCameraParameters::setAFBracket(const QCameraParameters& params)
             strcmp(str, prev_str) != 0) {
             m_bNeedRestart = true;
             return setAFBracket(str);
+        }
+    }
+    return NO_ERROR;
+}
+
+/*===========================================================================
+ * FUNCTION   : setReFocus
+ *
+ * DESCRIPTION: set refocus from user setting
+ *
+ * PARAMETERS :
+ *   @params  : user setting parameters
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setReFocus(const QCameraParameters& params)
+{
+    if ((m_pCapability->qcom_supported_feature_mask &
+            CAM_QCOM_FEATURE_REFOCUS) == 0) {
+        CDBG("%s: Refocus is not supported",__func__);
+        return NO_ERROR;
+    }
+    const char *str = params.get(KEY_QC_RE_FOCUS);
+    const char *prev_str = get(KEY_QC_RE_FOCUS);
+    CDBG_HIGH("%s: str =%s & prev_str =%s", __func__, str, prev_str);
+    if (str != NULL) {
+        if (prev_str == NULL ||
+            strcmp(str, prev_str) != 0) {
+            m_bNeedRestart = true;
+            return setReFocus(str);
         }
     }
     return NO_ERROR;
@@ -3341,6 +3407,37 @@ int32_t QCameraParameters::setTouchAFAEC(const QCameraParameters& params)
             return setTouchAFAEC(str);
         }
     }
+    return NO_ERROR;
+}
+
+/*===========================================================================
+ * FUNCTION   : setReFocus
+ *
+ * DESCRIPTION: set refocus value
+ *
+ * PARAMETERS :
+ *   @reFocusStr : refocus value string
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setReFocus(const char *reFocusStr)
+{
+    CDBG_HIGH("%s: reFocusStr =%s",__func__,reFocusStr);
+
+    if(reFocusStr != NULL) {
+        int value = lookupAttr(RE_FOCUS_MODES_MAP,
+                PARAM_MAP_SIZE(RE_FOCUS_MODES_MAP),
+                reFocusStr);
+        if (value != NAME_NOT_FOUND) {
+            m_bAFBracketingOn = (value != 0);
+            m_bReFocusOn = (value != 0);
+            updateParamEntry(KEY_QC_RE_FOCUS, reFocusStr);
+            return NO_ERROR;
+        }
+    }
+
     return NO_ERROR;
 }
 
@@ -3705,6 +3802,9 @@ int32_t QCameraParameters::setNumOfSnapshot()
         }
     }
 
+    if (isUbiRefocus()) {
+        nBurstNum = m_pCapability->refocus_af_bracketing_need.output_count + 1;
+    }
     CDBG_HIGH("%s: nBurstNum = %d, nExpnum = %d", __func__, nBurstNum, nExpnum);
     set(KEY_QC_NUM_SNAPSHOT_PER_SHUTTER, nBurstNum * nExpnum);
     return NO_ERROR;
@@ -3738,6 +3838,31 @@ int32_t QCameraParameters::setRecordingHint(const QCameraParameters& params)
                 ALOGE("Invalid recording hint value: %s", str);
                 return BAD_VALUE;
             }
+        }
+    }
+    return NO_ERROR;
+}
+
+/*===========================================================================
+ * FUNCTION   : setLowPowerMode
+ *
+ * DESCRIPTION: set camcorder power mode from user setting
+ *
+ * PARAMETERS :
+ *   @params  : user setting parameters
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setLowPowerMode(const QCameraParameters& params)
+{
+    const char *str_val = params.get(KEY_QC_LOW_POWER_MODE);
+    const char *prev_str = get(KEY_QC_LOW_POWER_MODE);
+
+    if(str_val != NULL) {
+        if (prev_str == NULL || strcmp(str_val, prev_str) != 0) {
+            return setLowPowerMode(str_val);
         }
     }
     return NO_ERROR;
@@ -4189,6 +4314,7 @@ int32_t QCameraParameters::updateParameters(QCameraParameters& params,
     if ((rc = setZslAttributes(params)))                final_rc = rc;
     if ((rc = setCameraMode(params)))                   final_rc = rc;
     if ((rc = setRecordingHint(params)))                final_rc = rc;
+    if ((rc = setLowPowerMode(params)))                 final_rc = rc;
 
     if ((rc = setPreviewFrameRate(params)))             final_rc = rc;
     if ((rc = setPreviewFpsRange(params)))              final_rc = rc;
@@ -4243,6 +4369,7 @@ int32_t QCameraParameters::updateParameters(QCameraParameters& params,
     if ((rc = setAlgoOptimizationsMask()))              final_rc = rc;
     if ((rc = setMobicat(params)))                      final_rc = rc;
     if ((rc = setAFBracket(params)))                    final_rc = rc;
+    if ((rc = setReFocus(params)))                      final_rc = rc;
     if ((rc = setChromaFlash(params)))                  final_rc = rc;
     if ((rc = setOptiZoom(params)))                     final_rc = rc;
     if ((rc = setFssr(params)))                         final_rc = rc;
@@ -4804,6 +4931,19 @@ int32_t QCameraParameters::initDefaultParameters()
          }
     }
 
+    //Set Refocus.
+    for (size_t i = 0; i < m_pCapability->supported_focus_modes_cnt; i++) {
+        if ((CAM_FOCUS_MODE_AUTO == m_pCapability->supported_focus_modes[i]) &&
+                (m_pCapability->qcom_supported_feature_mask &
+                CAM_QCOM_FEATURE_REFOCUS) > 0) {
+            String8 reFocusValues = createValuesStringFromMap(
+                    RE_FOCUS_MODES_MAP,
+                    PARAM_MAP_SIZE(RE_FOCUS_MODES_MAP));
+                    set(KEY_QC_SUPPORTED_RE_FOCUS_MODES, reFocusValues);
+            setReFocus(RE_FOCUS_OFF);
+        }
+    }
+
     //Set Chroma Flash.
     if ((m_pCapability->supported_flash_modes_cnt > 0) &&
             (m_pCapability->qcom_supported_feature_mask &
@@ -5013,7 +5153,7 @@ int32_t QCameraParameters::initDefaultParameters()
     CDBG_HIGH("%s: totalram = %ld, freeram = %ld ", __func__, info.totalram,
         info.freeram);
     if (info.totalram > TOTAL_RAM_SIZE_512MB) {
-        set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_TRUE);
+        set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_FALSE);
     } else {
         m_bIsLowMemoryDevice = true;
         set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_FALSE);
@@ -5024,6 +5164,13 @@ int32_t QCameraParameters::initDefaultParameters()
     set(KEY_QC_4K2K_LIVESNAP_SUPPORTED, VALUE_FALSE);
     //Set video buffers as uncached by default
     set(KEY_QC_CACHE_VIDEO_BUFFERS, VALUE_DISABLE);
+
+    if (m_pCapability->low_power_mode_supported == 1) {
+        set(KEY_QC_LOW_POWER_MODE_SUPPORTED, VALUE_TRUE);
+    } else {
+        set(KEY_QC_LOW_POWER_MODE_SUPPORTED, VALUE_FALSE);
+    }
+    setLowPowerMode(VALUE_DISABLE);
 
     int32_t rc = commitParameters();
     if (rc == NO_ERROR) {
@@ -7036,7 +7183,7 @@ int32_t QCameraParameters::set3ALock(const char *lockStr)
             }
             int32_t focus_mode;
             if (value == 1) {
-                if (isUbiFocusEnabled() || isMultiTouchFocusEnabled()) {
+                if (isUbiFocusEnabled() || isUbiRefocus() || isMultiTouchFocusEnabled()) {
                     //For Ubi focus and Multi-touch Focus move focus to infinity.
                     focus_mode = CAM_FOCUS_MODE_INFINITY;
                 } else if (isOptiZoomEnabled() || isfssrEnabled()){
@@ -7687,7 +7834,7 @@ int32_t QCameraParameters::updateFlash(bool commitSettings)
     }
 
     if (isHDREnabled() || m_bAeBracketingEnabled || m_bAFBracketingOn ||
-          m_bOptiZoomOn || m_bFssrOn || m_bSensorHDREnabled) {
+          m_bOptiZoomOn || m_bReFocusOn || m_bFssrOn || m_bSensorHDREnabled) {
         value = CAM_FLASH_MODE_OFF;
     } else if (m_bChromaFlashOn) {
         value = CAM_FLASH_MODE_ON;
@@ -8398,6 +8545,46 @@ int QCameraParameters::getMinPPBufs()
 }
 
 /*===========================================================================
+ * FUNCTION   : setLowPowerMode
+ *
+ * DESCRIPTION: enable/disable low power mode for camcorder
+ *
+ * PARAMETERS :
+ *   @mode   : enable/disable string
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setLowPowerMode(const char* mode)
+{
+    if (mode != NULL) {
+        int8_t value = lookupAttr(ENABLE_DISABLE_MODES_MAP,
+                PARAM_MAP_SIZE(ENABLE_DISABLE_MODES_MAP), mode);
+
+        char prop[PROPERTY_VALUE_MAX];
+        memset(prop, 0, sizeof(prop));
+        property_get("persist.camera.lowpower.enable", prop, "");
+
+        if (strlen(prop) > 0) {
+            value = atoi(prop);
+        }
+        if (value != NAME_NOT_FOUND) {
+            CDBG_HIGH("%s: Setting %s Power mode", __func__, value ? "low":"normal");
+            m_bLowPowerMode = value;
+            set(KEY_QC_LOW_POWER_MODE, mode);
+            m_bNeedRestart = true;
+            return AddSetParmEntryToBatch(m_pParamBuf,
+                                          CAM_INTF_PARM_LOW_POWER_ENABLE,
+                                          sizeof(value),
+                                          &value);
+        }
+    }
+    ALOGE("Invalid power mode value: %s", (mode == NULL) ? "NULL" : mode);
+    return BAD_VALUE;
+}
+
+/*===========================================================================
  * FUNCTION   : setRecordingHintValue
  *
  * DESCRIPTION: set recording hint
@@ -8443,11 +8630,6 @@ uint8_t QCameraParameters::getNumOfSnapshots()
         numOfSnapshot = (uint8_t)val;
     }
 
-    /* update the count for refocus */
-   if (isUbiRefocus()) {
-       numOfSnapshot = (uint8_t) (numOfSnapshot + UfOutputCount());
-   }
-
     return numOfSnapshot;
 }
 
@@ -8480,6 +8662,9 @@ uint8_t QCameraParameters::getBurstCountForAdvancedCapture()
     if (isUbiFocusEnabled()) {
         //number of snapshots required for Ubi Focus.
         burstCount = m_pCapability->ubifocus_af_bracketing_need.burst_count;
+    } else if (isUbiRefocus()) {
+        //number of snapshots required for Refocus.
+        burstCount = m_pCapability->refocus_af_bracketing_need.burst_count;
     } else if (isOptiZoomEnabled()) {
         //number of snapshots required for Opti Zoom.
         burstCount = m_pCapability->opti_zoom_settings_need.burst_count;
@@ -10377,11 +10562,12 @@ bool QCameraParameters::isMobicatEnabled()
 bool QCameraParameters::needThumbnailReprocess(uint32_t *pFeatureMask)
 {
     if (isUbiFocusEnabled() || isChromaFlashEnabled() ||
-            isOptiZoomEnabled() || isfssrEnabled() ||
+            isOptiZoomEnabled() || isUbiRefocus() || isfssrEnabled() ||
             isMultiTouchFocusEnabled() ||
             (isHDREnabled() && !isHDRThumbnailProcessNeeded()) || isDifferentFlipZSL()) {
         *pFeatureMask &= ~CAM_QCOM_FEATURE_CHROMA_FLASH;
         *pFeatureMask &= ~CAM_QCOM_FEATURE_UBIFOCUS;
+        *pFeatureMask &= ~CAM_QCOM_FEATURE_REFOCUS;
         *pFeatureMask &= ~CAM_QCOM_FEATURE_OPTIZOOM;
         *pFeatureMask &= ~CAM_QCOM_FEATURE_FSSR;
         *pFeatureMask &= ~CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
@@ -10413,12 +10599,10 @@ uint8_t QCameraParameters::getNumOfExtraBuffersForImageProc()
 {
     int numOfBufs = 0;
 
-    if (isUbiFocusEnabled()) {
+    if (isUbiRefocus()) {
+        return m_pCapability->refocus_af_bracketing_need.burst_count - 1;
+    } else if (isUbiFocusEnabled()) {
         numOfBufs += m_pCapability->ubifocus_af_bracketing_need.burst_count - 1;
-        if (isUbiRefocus()) {
-            numOfBufs +=
-                m_pCapability->ubifocus_af_bracketing_need.burst_count + 1;
-        }
     } else if (m_bMultiTouchFocusOn) {
         numOfBufs += m_pCapability->mtf_af_bracketing_parm.burst_count - 1;
         if (isMTFRefocus()) {

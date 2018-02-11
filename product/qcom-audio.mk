@@ -1,17 +1,14 @@
 # Audio
 PRODUCT_PACKAGES += \
-    audiod \
     audio.primary.msm8916 \
     audio.a2dp.default \
     audio.usb.default \
-    audio.r_submix.default \
-    libaudio-resampler \
+    audio.r_submix.default
 
 PRODUCT_PACKAGES += \
+    libqcompostprocbundle \
     libqcomvisualizer \
-    libqcomvoiceprocessing \
-    libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle
+    libqcomvoiceprocessing
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-impl \
